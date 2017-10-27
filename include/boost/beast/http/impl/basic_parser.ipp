@@ -17,13 +17,32 @@
 #include <boost/beast/http/error.hpp>
 #include <boost/beast/http/rfc7230.hpp>
 #include <boost/asio/buffer.hpp>
+
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 105600
 #include <boost/make_unique.hpp>
+#define HAVE_BOOST_MAKE_UNIQUE
+#else
+#endif
 #include <algorithm>
 #include <utility>
+#include <type_traits>
 
 namespace boost {
 namespace beast {
 namespace http {
+namespace detail {
+template <class Array,
+          class = typename std::enable_if<std::is_array<Array>::value>::type>
+std::unique_ptr<Array> make_unique_noinit(std::size_t size) {
+#ifdef HAVE_BOOST_MAKE_UNIQUE
+    return boost::make_unique_noinit<Array>(size);
+#else
+    return std::unique_ptr<Array>(
+        new typename std::remove_extent<Array>::type[size]);
+#endif // HAVE_BOOST_MAKE_UNIQUE
+}
+} // namespace detail
 
 template<bool isRequest, class Derived>
 basic_parser<isRequest, Derived>::
@@ -130,7 +149,7 @@ put(ConstBufferSequence const& buffers,
     if(size > buf_len_)
     {
         // reallocate
-        buf_ = boost::make_unique_noinit<char[]>(size);
+        buf_ = detail::make_unique_noinit<char[]>(size);
         buf_len_ = size;
     }
     // flatten

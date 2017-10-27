@@ -25,6 +25,7 @@
 #include <boost/config.hpp>
 #include <boost/optional.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/utility/typed_in_place_factory.hpp>
 
 namespace boost {
 namespace beast {
@@ -156,8 +157,9 @@ operator()(
     do_read:
         try
         {
-            mb_.emplace(b_.prepare(
-                read_size_or_throw(b_, 65536)));
+            mb_ = boost::in_place<typename DynamicBuffer::mutable_buffers_type,
+                                  decltype(b_.prepare(read_size_or_throw(b_, 65536)))>
+                (b_.prepare(read_size_or_throw(b_, 65536)));
         }
         catch(std::length_error const&)
         {

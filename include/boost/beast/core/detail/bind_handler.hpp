@@ -14,7 +14,7 @@
 #include <boost/asio/handler_alloc_hook.hpp>
 #include <boost/asio/handler_continuation_hook.hpp>
 #include <boost/asio/handler_invoke_hook.hpp>
-#include <boost/core/ignore_unused.hpp>
+#include <boost/beast/core/detail/ignore_unused.hpp>
 #include <functional>
 #include <utility>
 

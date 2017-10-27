@@ -10,6 +10,8 @@
 #ifndef BOOST_BEAST_IMPL_STRING_PARAM_IPP
 #define BOOST_BEAST_IMPL_STRING_PARAM_IPP
 
+#include <boost/utility/typed_in_place_factory.hpp>
+
 namespace boost {
 namespace beast {
 
@@ -35,7 +37,7 @@ typename std::enable_if<
 string_param::
 print(T const& t)
 {
-    os_.emplace(buf_, sizeof(buf_));
+    os_ = in_place<detail::static_ostream>(buf_, sizeof(buf_));
     *os_ << t;
     os_->flush();
     sv_ = os_->str();
@@ -87,7 +89,7 @@ void
 string_param::
 print(T0 const& t0, T1 const& t1, TN const&... tn)
 {
-    os_.emplace(buf_, sizeof(buf_));
+    os_ = in_place<detail::static_ostream>(buf_, sizeof(buf_));
     print_1(t0);
     print_1(t1);
     print_n(tn...);

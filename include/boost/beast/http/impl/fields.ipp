@@ -19,6 +19,7 @@
 #include <boost/beast/http/status.hpp>
 #include <boost/beast/http/chunk_encode.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/utility/typed_in_place_factory.hpp>
 #include <stdexcept>
 #include <string>
 
@@ -177,7 +178,7 @@ basic_fields<Allocator>::reader::
 reader(basic_fields const& f)
     : f_(f)
 {
-    view_.emplace(
+    view_ = boost::in_place<view_type>(
         boost::asio::const_buffers_1{nullptr, 0},
         boost::asio::const_buffers_1{nullptr, 0},
         boost::asio::const_buffers_1{nullptr, 0},
@@ -217,7 +218,7 @@ reader(basic_fields const& f,
     buf_[9] = '\r';
     buf_[10]= '\n';
 
-    view_.emplace(
+    view_ = boost::in_place<view_type>(
         boost::asio::const_buffers_1{sv.data(), sv.size()},
         boost::asio::const_buffers_1{
             f_.target_or_reason_.data(),
@@ -259,7 +260,7 @@ reader(basic_fields const& f,
     else
         sv = obsolete_reason(static_cast<status>(code));
 
-    view_.emplace(
+    view_ = boost::in_place<view_type>(
         boost::asio::const_buffers_1{buf_, 13},
         boost::asio::const_buffers_1{sv.data(), sv.size()},
         boost::asio::const_buffers_1{"\r\n", 2},

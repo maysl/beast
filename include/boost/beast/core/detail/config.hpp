@@ -15,7 +15,7 @@
 
 // Available to every header
 #include <boost/config.hpp>
-#include <boost/core/ignore_unused.hpp>
+#include <boost/beast/core/detail/ignore_unused.hpp>
 #include <boost/static_assert.hpp>
 
 /*
@@ -40,7 +40,6 @@
 #else
 # if \
     defined(BOOST_NO_CXX11_DECLTYPE) || \
-    defined(BOOST_NO_CXX11_HDR_TUPLE) || \
     defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) || \
     defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 #  error Beast requires C++11: a conforming compiler is needed

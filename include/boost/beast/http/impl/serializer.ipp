@@ -15,6 +15,7 @@
 #include <boost/beast/http/status.hpp>
 #include <boost/beast/core/detail/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/utility/typed_in_place_factory.hpp>
 #include <ostream>
 
 namespace boost {
@@ -27,7 +28,7 @@ void
 serializer<isRequest, Body, Fields>::
 frdinit(std::true_type)
 {
-    frd_.emplace(m_, m_.version(), m_.method());
+    frd_ = in_place<typename Fields::reader>(m_, m_.version(), m_.method());
 }
 
 template<
@@ -36,7 +37,7 @@ void
 serializer<isRequest, Body, Fields>::
 frdinit(std::false_type)
 {
-    frd_.emplace(m_, m_.version(), m_.result_int());
+    frd_ = in_place<typename Fields::reader>(m_, m_.version(), m_.result_int());
 }
 
 template<

@@ -10,7 +10,12 @@
 #ifndef BOOST_BEAST_DETAIL_EMPTY_BASE_OPTIMIZATION_HPP
 #define BOOST_BEAST_DETAIL_EMPTY_BASE_OPTIMIZATION_HPP
 
-#include <boost/type_traits/is_final.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 105700
+# define HAVE_IS_FINAL_TYPE_TRAIT
+# include <boost/type_traits/is_final.hpp>
+#endif
+
 #include <type_traits>
 #include <utility>
 
@@ -21,8 +26,14 @@ namespace detail {
 template<class T>
 struct is_empty_base_optimization_derived
     : std::integral_constant<bool,
-        std::is_empty<T>::value &&
-        ! boost::is_final<T>::value>
+        std::is_empty<T>::value
+#ifdef HAVE_IS_FINAL_TYPE_TRAIT
+        && ! boost::is_final<T>::value
+#else
+        // not checking for final here
+        // will in the worst case lead to a compile error.
+#endif
+        >
 {
 };
 

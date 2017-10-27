@@ -93,7 +93,7 @@ private:
         do_header_only      =  20,
         do_header           =  30,
         do_body             =  40,
-        
+
         do_init_c           =  50,
         do_header_only_c    =  60,
         do_header_c         =  70,
@@ -153,7 +153,7 @@ private:
         typename reader::const_buffers_type,        // body
         chunk_crlf,                                 // crlf
         boost::asio::const_buffers_1,               // chunk-final
-        boost::asio::const_buffers_1,               // trailers 
+        boost::asio::const_buffers_1,               // trailers
         chunk_crlf>>;                               // crlf
     using pcb6_t = buffers_prefix_view<cb6_t const&>;
 
@@ -165,13 +165,13 @@ private:
         typename reader::const_buffers_type,        // body
         chunk_crlf,                                 // crlf
         boost::asio::const_buffers_1,               // chunk-final
-        boost::asio::const_buffers_1,               // trailers 
+        boost::asio::const_buffers_1,               // trailers
         chunk_crlf>>;                               // crlf
     using pcb7_t = buffers_prefix_view<cb7_t const&>;
 
     using cb8_t = buffers_suffix<buffers_cat_view<
         boost::asio::const_buffers_1,               // chunk-final
-        boost::asio::const_buffers_1,               // trailers 
+        boost::asio::const_buffers_1,               // trailers
         chunk_crlf>>;                               // crlf
     using pcb8_t = buffers_prefix_view<cb8_t const&>;
 
@@ -336,7 +336,7 @@ public:
         This function will attempt to call the `visit` function
         object with a @b ConstBufferSequence of unspecified type
         representing the next set of buffers in the serialization
-        of the message represented by this object. 
+        of the message represented by this object.
 
         If there are no more buffers in the serialization, the
         visit function will not be called. In this case, no error
